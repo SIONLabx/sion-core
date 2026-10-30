@@ -15,12 +15,14 @@ const (
 	RoleUser      Role = "user"
 	RoleAssistant Role = "assistant"
 	RoleSystem    Role = "system"
+	RoleTool      Role = "tool"
 )
 
-var roleSet = map[Role]bool{
+var RoleSet = map[Role]bool{
 	RoleUser:      true,
 	RoleAssistant: true,
 	RoleSystem:    true,
+	RoleTool:      true,
 }
 
 // Message 表示一条消息，包含角色和有序的内容块。
@@ -33,7 +35,7 @@ type Message struct {
 func (m *Message) Validate() error {
 	var isEmpty = true
 	var errs []error
-	if _, ok := roleSet[m.Role]; !ok {
+	if _, ok := RoleSet[m.Role]; !ok {
 		// 角色不合法
 		errs = append(errs, fmt.Errorf("invalid role: %s", m.Role))
 	}
@@ -47,12 +49,15 @@ func (m *Message) Validate() error {
 			errs = append(errs, fmt.Errorf("message(role=%s).content[%d]: %w", m.Role, idx, err))
 		}
 	}
-
-	if len(m.Content) == 0 || isEmpty {
-		errs = append(errs, fmt.Errorf("message(role=%s) is empty", m.Role))
+	if len(errs) > 0 {
+		// 错误合并返回
+		return errors.Join(errs...)
 	}
-
-	return errors.Join(errs...)
+	// 消息内容为空,也报错，理论上不应该出现这种情况
+	if len(m.Content) == 0 || isEmpty {
+		return fmt.Errorf("message(role=%s) is empty", m.Role)
+	}
+	return nil
 }
 
 func NewMessage(role Role, content ...ContentBlock) (Message, error) {
