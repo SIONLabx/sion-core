@@ -6,7 +6,7 @@
 
 sion-core 分为两个模块：**ai 负责调用模型，agent 负责使用模型和工具完成多轮运行。** 调用方用 SDK 提供的方法组织 System Prompt、消息、图片、工具和参数，获得统一的结果、事件与 usage；需要自动执行循环时，再组合 Agent Runtime。
 
-当前已按下面的目录创建源码骨架，并初始化 `github.com/SIONLabx/sion-core` 模块，使用 Go 1.25。每个 Go 文件仅包含首行职责注释与 `package` 声明；具体接口签名尚未冻结，模型调用和 Agent Runtime 功能尚未实现。
+当前已按下面的目录创建源码骨架，并初始化 `github.com/SIONLabx/sion-core` 模块，使用 Go 1.25。`ai/chat` 已实现统一纯文本消息与内容块、构造函数、校验和错误汇总，其余 Go 文件仍以职责注释和 `package` 声明为主；具体接口签名尚未冻结，模型调用和 Agent Runtime 功能尚未实现。
 
 ## 模块概览
 
@@ -199,6 +199,8 @@ flowchart LR
 
 ## 文档
 
+- [手写实现任务：8 个阶段、47 个小需求](../sion-docs/sion-core/tasks/README.md)
+- [第一个任务：统一文本消息](../sion-docs/sion-core/tasks/T01-text-messages.md)
 - [目录设计、依赖规则与验收](../sion-docs/sion-core/01-directory-structure.md)
 - [Agent Runtime：循环、状态、执行与用量](../sion-docs/sion-core/agent-runtime.md)
 - [协议请求格式：完整 JSON 与差异](../sion-docs/sion-core/protocol-request-examples.md)
